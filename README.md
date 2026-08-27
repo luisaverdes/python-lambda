@@ -32,10 +32,11 @@ parts.
 
 # Requirements
 
-* Python 2.7 & 3.6 (At the time of writing this, AWS Lambda only supports Python 2.7/3.6).
-* Pip (~8.1.1)
-* Virtualenv (~15.0.0)
-* Virtualenvwrapper (~4.7.1)
+* Python 2.7, >= 3.6 (At the time of writing this, these are the Python runtimes supported by AWS Lambda).
+* Pip (\~8.1.1)
+* Virtualenv (\~15.0.0)
+* Virtualenvwrapper (\~4.7.1)
+
 
 # Getting Started
 
@@ -191,7 +192,8 @@ This would create environment variables in the lambda instance upon deploy. If
 your functions don't need environment variables, simply leave this section out
 of your config.
 
-### Uploading to S3 You may find that you do not need the toolkit to fully
+### Uploading to S3
+You may find that you do not need the toolkit to fully
 deploy your Lambda or that your code bundle is too large to upload via the API.
 You can use the ``upload`` command to send the bundle to an S3 bucket of your
 choosing.  Before doing this, you will need to set the following variables in
@@ -208,33 +210,34 @@ execute ``lambda upload`` to initiate the transfer.
 
 ### Deploying via S3
 You can also choose to use S3 as your source for Lambda deployments.  This can
-be done by issuing ``lambda deploy_s3`` with the same variables/AWS permissions
+be done by issuing ``lambda deploy-s3`` with the same variables/AWS permissions
 you'd set for executing the ``upload`` command.
 
-### Development
+## Development
 Development of "python-lambda" is facilitated exclusively on GitHub.
 Contributions in the form of patches, tests and feature creation and/or
 requests are very welcome and highly encouraged. Please open an issue if this
 tool does not function as you'd expect.
 
+### Environment Setup
+1. [Install pipenv](https://github.com/pypa/pipenv)
+2. [Install direnv](https://direnv.net/)
+3. [Install Precommit](https://pre-commit.com/#install) (optional but preferred)
+4. ``cd`` into the project and enter "direnv allow" when prompted. This will begin
+   installing all the development dependancies.
+5. If you installed pre-commit, run ``pre-commit install`` inside the project
+   directory to setup the githooks.
 
-### How to release updates If this is the first time you're releasing to pypi,
-you'll need to run: ``pip install -r tests/dev_requirements.txt``.
+### Releasing to Pypi
+Once you pushed your chances to master, run **one** of the following:
 
-Once complete, execute the following commands:
+ ```sh
+ # If you're installing a major release:
+ make deploy-major
 
-```bash
-git checkout master
+ # If you're installing a minor release:
+ make deploy-minor
 
-# Increment the version number and tag the release.
-bumpversion [major|minor|patch]
-
-# Upload the distribution to PyPi
-python setup.py sdist bdist_wheel upload
-
-# Since master often contains work-in-progress changes, increment the version
-# to a patch release to prevent inaccurate attribution.
-bumpversion --no-tag patch
-
-git push origin master --tags
-```
+# If you're installing a patch release:
+make deploy-patch
+ ```
